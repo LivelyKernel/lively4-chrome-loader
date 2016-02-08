@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Lively4 Loader",
+  "description": "Loads the Lively 4 system into any website",
+  "version": "0.1",
+  "browser_action": {
+    "default_icon": "media/icon-active.png",
+    "default_popup": "static/popup.html"
+  },
+  "permissions": [
+    "tabs", "activeTab", "http://*/*", "https://*/*"
+  ],
+  "content_scripts": [{
+    "js": [ "libs/jquery.min.js" ],
+    "matches": [ "http://*/*", "https://*/*" ]
+  }]
+}
