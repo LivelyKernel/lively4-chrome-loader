@@ -10,10 +10,18 @@ function loadComponent() {
 			file: 'scripts/loadComponent.js'
 		});
 	}); 
+	window.close();
+}
+
+function loadComponentOnEnter(event) {
+	if(event.keyCode == 13) {
+        loadComponent();
+    }
 }
 
 function init() {
 	document.getElementById('load_button').addEventListener('click', loadComponent);
+	document.body.addEventListener('keyup', loadComponentOnEnter);
 }
 
 document.addEventListener('DOMContentLoaded', init);
