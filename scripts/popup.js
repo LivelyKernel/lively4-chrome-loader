@@ -11,9 +11,9 @@ function loadComponent() {
 			chrome.tabs.executeScript(null, {
 				file: 'scripts/loadComponent.js',
 			});
+			window.close();
 		})
 	}); 
-	window.close();
 }
 
 function loadComponentOnEnter(event) {
