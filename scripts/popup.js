@@ -3,6 +3,10 @@ function loadComponent() {
 		component: document.getElementById('component_input').value,
 		location: document.getElementById('location_input').value
 	};
+	chrome.runtime.sendMessage({ loadComponent: {
+		component: document.getElementById('component_input').value,
+		location: document.getElementById('location_input').value
+	} });
 	chrome.tabs.getSelected(function(tab) {
 		config.tab = tab;
 		chrome.tabs.executeScript(null, {
@@ -13,16 +17,32 @@ function loadComponent() {
 			});
 			window.close();
 		})
-	}); 
+	});
 }
 
-function loadComponentOnEnter(event) {
-	if(event.keyCode == 13) {
-        loadComponent();
-    }
+function replaceLocationValue(config) {
+	if (config.locationString) {
+		document.getElementById('location_input').value = locationString;
+	}
+}
+
+function replaceDefaultsWithStoredValues() {
+	chrome.storage.local.get(['lively4'], function(items) {
+		if (items && items.lively4) {
+			var componentString = items.lively4.componentString;
+			var locationString = items.lively4.locationString;
+			if (componentString) {
+				document.getElementById('component_input').value = componentString;
+			}
+			if (locationString) {
+				document.getElementById('location_input').value = locationString;
+			}
+		}
+	})
 }
 
 function init() {
+	replaceDefaultsWithStoredValues();
 	document.getElementById('load_button').addEventListener('click', loadComponent);
 	document.body.addEventListener('keyup', loadComponentOnEnter);
 }

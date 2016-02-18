@@ -36,6 +36,15 @@ function onTabAction(tabId) {
 	})
 }
 
+function loadComponent(config) {
+	chrome.storage.local.set( {
+		'lively4': {
+			'componentString': config.component,
+			'locationString': config.location
+		}
+	})
+}
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.newIconPath) {
 	    chrome.browserAction.setIcon({
@@ -45,6 +54,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.loadedInTab) {
 		tabsStore[request.loadedInTab.id] = 'hasLivelyLoaded';
 		updateIconInTab(request.loadedInTab);
+    }
+    if (request.loadComponent) {
+		loadComponent(request.loadComponent);
     }
 });
 
