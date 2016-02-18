@@ -18,7 +18,7 @@ function updateIconInTab(tab) {
 }
 
 function setActiveInTab(tab) {
-	if (tab.url.startsWith('http://')) {
+	if (tab.url.startsWith('http://') || tab.url.startsWith('https://')) {
 		if (tabsStore[tab.id] === 'hasLivelyLoaded') {
 			tabsStore[tab.id] = 'hasLivelyLoaded';
 		} else {
