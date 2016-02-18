@@ -3,12 +3,15 @@ function loadComponent() {
 		component: document.getElementById('component_input').value,
 		location: document.getElementById('location_input').value
 	};
-	chrome.tabs.executeScript(null, {
-		code: "var config = " + JSON.stringify(config)
-	}, function () {
+	chrome.tabs.getSelected(function(tab) {
+		config.tab = tab;
 		chrome.tabs.executeScript(null, {
-			file: 'scripts/loadComponent.js'
-		});
+			code: "var config = " + JSON.stringify(config)
+		}, function () {
+			chrome.tabs.executeScript(null, {
+				file: 'scripts/loadComponent.js',
+			});
+		})
 	}); 
 	window.close();
 }

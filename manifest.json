@@ -8,6 +8,9 @@
     "default_icon": "media/icon-active.png",
     "default_popup": "static/popup.html"
   },
+  "background": {
+    "scripts": ["scripts/background.js"]
+  },
   "permissions": [
     "tabs", "activeTab", "http://*/*", "https://*/*"
   ],
