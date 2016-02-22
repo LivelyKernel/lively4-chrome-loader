@@ -3,7 +3,7 @@ loadTemplate(
   config.location);
 
 function loadTemplate (partNamesString, url) {
-  lively4Url = url;
+  window.lively4Url = url;
   loadJQuery();
   setTimeout(function() {
     loadSystem();
@@ -96,12 +96,9 @@ function loadBabel () {
 }
 
 function loadLively4 () {
-  System.import(lively4Url + "src/client/script-manager.js").then(function(module) {
-      window.scriptManager = module;
-      console.log("scriptManager loaded");
-  });
-  System.import(lively4Url + "src/client/persistence.js").then(function(module) {
-      window.persistence = module;
-      console.log("persistence loaded");
-  });
+  System.import(lively4Url + "/src/client/load.js").then(function(load) {
+    load.whenLoaded(() => {
+      console.log("lively loaded! " + lively.preferences.getBaseURL());
+    })
+  })
 }

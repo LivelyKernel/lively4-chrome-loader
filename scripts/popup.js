@@ -13,8 +13,9 @@ function loadIntoTab(config) {
 		}, function () {
 			chrome.tabs.executeScript(null, {
 				file: 'scripts/loadComponent.js',
+			}, function () {
+				window.close();
 			});
-			window.close();
 		})
 	});
 }
