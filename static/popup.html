@@ -3,11 +3,59 @@
   <head>
     <title>Lively4 Loader</title>
     <script type="text/javascript" src="../scripts/popup.js"></script>
+    <style type="text/css">
+      body {
+          width: 240px;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          color: #464E5A;
+      }
+      button {
+          background-color: #ff9900;
+          border: none;
+          padding: 18px;
+          display: table;
+          margin: 10px auto;
+          font-weight: bold;
+          width: 100%;
+          color: #464E5A;
+          font-size: 14px;
+      }
+      input {
+        padding: 5px;
+        width: 95%;
+      }
+      #popup_header {
+        background-color: #ff9900;
+        padding: 10px;
+        display: table;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        left: -10px;
+      }
+      #popup_header h1 {
+        display: inline-block;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      #popup_header img {
+          width: 72px;
+          height: 72px;
+          top: -5px;
+          left: 7px;
+          position: relative;
+      }
+    </style>
   </head>
   <body>
-    <div>Enter your servers location</div>
+    <div id="popup_header">
+      <img src="../media/icon-active.svg">
+      <h1>Lively4 Loader</h1>
+    </div>
+    <h3>Enter your servers location</h3>
     <input id="location_input" type="text" value="http://lively-kernel.org/lively4-jens/"></input>
-    <div>Name a component to load</div>
+    <h3>Name a component to load</h3>
     <input id="component_input" type="text" value="lively-halos"></input>
     <button type="button" id="load_button">Load component</button>
   </body>
