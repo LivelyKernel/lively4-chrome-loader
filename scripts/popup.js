@@ -41,6 +41,12 @@ function replaceDefaultsWithStoredValues() {
 	})
 }
 
+function loadComponentOnEnter(event) {
+	if (event.keyCode === 13) {
+		loadComponent();
+	}
+}
+
 function init() {
 	replaceDefaultsWithStoredValues();
 	document.getElementById('load_button').addEventListener('click', loadComponent);
