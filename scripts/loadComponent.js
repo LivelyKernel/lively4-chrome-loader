@@ -45,7 +45,10 @@ function mountPart(partIdentifierString) {
   document.body.insertBefore(aToolbox, document.body.firstChild);
   aToolbox.style.setProperty('position', 'fixed');
   aToolbox.style.setProperty('z-index', 10000);
-  chrome.runtime.sendMessage({ loadedInTab: config.tab });
+  chrome.runtime.sendMessage({
+    type: 'loadedInTab',
+    payload: config.tab
+  });
 }
 
 function loadAce() {

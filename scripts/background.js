@@ -1,43 +1,80 @@
+var STATE = {
+	LOADED: 'loaded',
+	ACTIVE: 'active',
+	INACTIVE: 'inactive'
+}
 var tabsStore = {};
 
-function updateIconInTab(tab) {
-	switch(tabsStore[tab.id]) {
-		case 'hasLivelyLoaded': {
-			chrome.runtime.sendMessage({ 'newIconPath' : 'media/icon-loaded.png' });
-			break;
-		}
-		case 'canLively': {
-			chrome.runtime.sendMessage({ 'newIconPath' : 'media/icon-active.png' });
-			break;
-		}
-		default: {
-			chrome.runtime.sendMessage({ 'newIconPath' : 'media/icon-inactive.png' });
-			break;
-		}
-	}
+/**
+* HELPERS
+*/
+
+function setIconForTab(tab) {
+	setIconPath('media/icon-' + tabsStore[tab.id] + '.png');
 }
 
-function setActiveInTab(tab) {
-	if (tab.url.startsWith('http://') || tab.url.startsWith('https://')) {
-		if (tabsStore[tab.id] === 'hasLivelyLoaded') {
-			tabsStore[tab.id] = 'hasLivelyLoaded';
-		} else {
-			tabsStore[tab.id] = 'canLively';
-		}
-	} else {
-		tabsStore[tab.id] = 'cannotLively';
-	}
-	updateIconInTab(tab);
+function supportsUrl(urlString) {
+	return urlString.startsWith('http://') || urlString.startsWith('https://')
 }
 
-function onTabAction(tabId) {
+function setTabState(tab, state) {
+	tabsStore[tab.id] = state;
+}
+
+function updateTabState(tab) {
+	var newState = tab === STATE.LOADED ? STATE.LOADED :
+		supportsUrl(tab.url) ? STATE.ACTIVE :
+		STATE.INACTIVE;
+	setTabState(tab, newState);
+	setIconForTab(tab);
+}
+
+/**
+* EVENT HANDLERS
+*/
+function onVisitTab(tabId) {
 	chrome.tabs.get(tabId, function (tab) {
-		setActiveInTab(tab);
+		updateTabState(tab);
 	})
 }
 
-function loadComponent(config) {
-	chrome.storage.local.set( {
+function onUpdateTab(tab) {
+	if (tab.status === 'loading') {
+		var doLoadAgain = tabsStore[tab.id] === STATE.LOADED;
+		delete tabsStore[tab.id];
+	}
+	chrome.tabs.getSelected(function(selectedTab) {
+		if (tab.id === selectedTab.id) {
+			updateTabState(tab);
+		}
+	})
+}
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+	onVisitTab(activeInfo.tabId);
+})
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	onUpdateTab(tab);
+})
+
+/**
+* MESSAGE PROTOCOL
+*/
+
+function setLoadedInTab(tab) {
+	setTabState(tab, STATE.LOADED);
+	setIconForTab(tab);
+}
+
+function setIconPath(path) {
+	chrome.browserAction.setIcon({
+        path: path
+    });
+}
+
+function saveSettings(config) {
+	chrome.storage.local.set({
 		'lively4': {
 			'componentString': config.component,
 			'locationString': config.location
@@ -46,33 +83,9 @@ function loadComponent(config) {
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.newIconPath) {
-	    chrome.browserAction.setIcon({
-	        path: request.newIconPath
-	    });
-    }
-    if (request.loadedInTab) {
-		tabsStore[request.loadedInTab.id] = 'hasLivelyLoaded';
-		updateIconInTab(request.loadedInTab);
-    }
-    if (request.loadComponent) {
-		loadComponent(request.loadComponent);
-    }
-});
-
-chrome.tabs.onActivated.addListener(function(activeInfo) {
-	onTabAction(activeInfo.tabId);
-})
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if (tab.status === 'loading') {
-		var doLoadAgain = tabsStore[tabId] === 'hasLivelyLoaded';
-		delete tabsStore[tabId];
-		setActiveInTab(tab);
+	switch(request.type) {
+		case 'newIconPath': setIconPath(request.payload); break;
+		case 'loadedInTab': setLoadedInTab(request.payload); break;
+		case 'saveSettings': saveSettings(request.payload); break;
 	}
-	chrome.tabs.getSelected(function(selectedTab) {
-		if (tab.id === selectedTab.id) {
-			setActiveInTab(tab);
-		}
-	})
-})
+});

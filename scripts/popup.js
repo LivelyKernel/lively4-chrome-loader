@@ -2,11 +2,11 @@ function loadComponent() {
 	var config = {
 		component: document.getElementById('component_input').value,
 		location: document.getElementById('location_input').value
-	};
-	chrome.runtime.sendMessage({ loadComponent: {
-		component: document.getElementById('component_input').value,
-		location: document.getElementById('location_input').value
-	} });
+	}
+	chrome.runtime.sendMessage({
+		type: 'saveConfig',
+		payload: config
+	});
 	chrome.tabs.getSelected(function(tab) {
 		config.tab = tab;
 		chrome.tabs.executeScript(null, {
