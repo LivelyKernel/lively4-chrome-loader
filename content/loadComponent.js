@@ -1,5 +1,4 @@
 var lively4Url;
-debugger;
 
 loadTemplate(
   config.component,
@@ -23,7 +22,6 @@ function loadTemplate (componentName, url) {
 function loadTemplateLinkTag(templateName) {
   var linkTag = document.createElement('link');
   linkTag.setAttribute('rel', 'import');
-  debugger
   linkTag.setAttribute('href', lively4Url + 'templates/' + templateName + '.html');
   document.head.appendChild(linkTag);
 }
