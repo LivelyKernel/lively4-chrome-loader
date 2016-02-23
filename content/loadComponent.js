@@ -6,6 +6,7 @@ loadTemplate(
 
 function loadTemplate (partNamesString, url) {
   lively4Url = url;
+  injectLively4URL();
   loadJQuery();
   setTimeout(function() {
     loadSystem();
@@ -60,7 +61,6 @@ function loadBabel () {
   var babelLoaderNode = document.createElement('script');
   babelLoaderNode.setAttribute('type', 'text/javascript');
   babelLoaderNode.innerHTML = `
-    window.lively4Url = '${lively4Url}';
     System.paths['babel'] = '${lively4Url}src/external/babel-browser.js;'
     System.config({
       transpiler: 'babel',
@@ -81,4 +81,11 @@ function loadLively4 () {
       console.log("lively loaded! " + lively.preferences.getBaseURL());
     })
   })
+}
+
+function injectLively4URL() {
+  var lively4Node = document.createElement('script');
+  lively4Node.setAttribute('type', 'text/javascript');
+  lively4Node.innerHTML = `window.lively4Url = '${lively4Url}';`;
+  document.head.appendChild(lively4Node);
 }
