@@ -10,7 +10,7 @@ var tabsStore = {};
 */
 
 function setIconForTab(tab) {
-	setIconPath('media/icon-' + tabsStore[tab.id] + '.png');
+	setIconPath('background/media/icon-' + tabsStore[tab.id] + '.png');
 }
 
 function supportsUrl(urlString) {

@@ -12,7 +12,7 @@ function loadIntoTab(config) {
 			code: "var config = " + JSON.stringify(config)
 		}, function () {
 			chrome.tabs.executeScript(null, {
-				file: 'scripts/loadComponent.js',
+				file: 'content/loadComponent.js',
 			}, function () {
 				window.close();
 			});

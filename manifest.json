@@ -5,17 +5,18 @@
   "description": "Loads the Lively 4 system into any website",
   "version": "0.1",
   "browser_action": {
-    "default_icon": "media/icon-active.png",
-    "default_popup": "static/popup.html"
+    "default_icon": "background/media/icon-active.png",
+    "default_popup": "ui/popup.html"
   },
   "background": {
-    "scripts": ["scripts/background.js"]
+    "scripts": ["background/eventPage.js"],
+    "persistent": false
   },
   "permissions": [
     "tabs", "activeTab", "http://*/*", "https://*/*", "storage"
   ],
   "content_scripts": [{
-    "js": [ "libs/jquery.min.js" ],
+    "js": [ "content/thirdparty/jquery.min.js" ],
     "matches": [ "http://*/*", "https://*/*" ]
   }]
 }

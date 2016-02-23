@@ -47,8 +47,8 @@ function loadJQuery () {
 function loadSystem () {
   $.get(lively4Url + 'src/external/system.src.js', function(data) {
     data = data.replace(
-      'var baseURIObj = new URL(baseURI);',
-      'var baseURIObj = new URL("' + lively4Url + 'draft/");' );
+      `var baseURIObj = new URL(baseURI);`,
+      `var baseURIObj = new URL("${lively4Url}draft/");` );
     var systemScriptNode = document.createElement('script');
     systemScriptNode.setAttribute('type', 'text/javascript');
     systemScriptNode.innerHTML = data;
