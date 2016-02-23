@@ -1,9 +1,11 @@
+var lively4Url;
+
 loadTemplate(
   config.component,
   config.location);
 
 function loadTemplate (partNamesString, url) {
-  window.lively4Url = url;
+  lively4Url = url;
   loadJQuery();
   setTimeout(function() {
     loadSystem();
@@ -81,7 +83,8 @@ function loadBabel () {
   var babelLoaderNode = document.createElement('script');
   babelLoaderNode.setAttribute('type', 'text/javascript');
   babelLoaderNode.innerHTML = '' + '\n' +
-    "System.paths['babel'] = '" + lively4Url + "src/external/babel-browser.js'" + '\n' +
+    "window.lively4Url = '" + lively4Url + "';\n" +
+    "System.paths['babel'] = '" + lively4Url + "src/external/babel-browser.js'" + ';\n' +
     "System.config({" + '\n' +
       "transpiler: 'babel'," + '\n' +
       "babelOptions: { }," + '\n' +
