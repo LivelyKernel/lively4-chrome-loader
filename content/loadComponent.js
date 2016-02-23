@@ -1,4 +1,5 @@
 var lively4Url;
+debugger;
 
 loadTemplate(
   config.component,
@@ -13,15 +14,16 @@ function loadTemplate (componentName, url) {
     setTimeout(function () {
       loadBabel();
       loadLively4();
-      loadTemplate(componentName);
+      loadTemplateLinkTag(componentName);
       mountComponent(componentName);
     }, 1000)
   }, 1000)
 }
 
-function loadTemplate(templateName) {
+function loadTemplateLinkTag(templateName) {
   var linkTag = document.createElement('link');
   linkTag.setAttribute('rel', 'import');
+  debugger
   linkTag.setAttribute('href', lively4Url + 'templates/' + templateName + '.html');
   document.head.appendChild(linkTag);
 }
