@@ -5,6 +5,12 @@ The lively4 code can be found at https://github.com/LivelyKernel/lively4-core
 
 This Chrome extension consists of three components: **background**, **content** and **ui**. Ui is responsible for creating a popup when clicking the extension icon. Background updates the icon and stores information from the popups input fields. Content scripts are used to manipulate the DOM of the current tab.
 
+##Setup and usage
+1. clone into https://github.com/LivelyKernel/lively4-chrome-loader.git
+2. Load the code as an unpacked extension ([instructions from Chrome](https://developer.chrome.com/extensions/getstarted#unpacked))
+
+A lively icon will appear in the top right corner of your browser. Click it, configure the source you want to load lively from (e.g. http://lively-kernel.org/lively4-core/) and a lively component to load (e.g. lively-halos) and hit "load component". The component will be added to the DOM and its shadow DOM will be created. Components it depends on will automatically be loaded, too.
+
 ##Basic workflow
 The component loading workflow from a technical perspective looks like this:
 
