@@ -32,7 +32,7 @@ function setDefaultValue(inputType, value) {
 }
 
 function replaceDefaultsWithStoredValues() {
-	chrome.storage.local.get(['lively4'], function(items) {
+	chrome.storage.sync.get(['lively4'], function(items) {
 		if (items && items.lively4) {
 			setDefaultValue('component', items.lively4.componentString);
 			setDefaultValue('location', items.lively4.locationString);

@@ -74,7 +74,7 @@ function setIconPath(path) {
 }
 
 function saveSettings(config) {
-	chrome.storage.local.set({
+	chrome.storage.sync.set({
 		'lively4': {
 			'componentString': config.component,
 			'locationString': config.location
@@ -84,8 +84,7 @@ function saveSettings(config) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch(request.type) {
-		case 'newIconPath': setIconPath(request.payload); break;
 		case 'loadedInTab': setLoadedInTab(request.payload); break;
-		case 'saveSettings': saveSettings(request.payload); break;
+		case 'saveConfig': saveSettings(request.payload); break;
 	}
 });
