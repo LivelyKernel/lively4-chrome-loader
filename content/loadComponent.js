@@ -1,11 +1,11 @@
-var lively4Url;
+var localLively4Url;
 
 loadTemplate(
   config.component,
   config.location);
 
 function loadTemplate (componentName, url) {
-  lively4Url = url;
+  localLively4Url = url;
   injectLively4URL();
   loadJQuery();
   setTimeout(function() {
@@ -22,7 +22,7 @@ function loadTemplate (componentName, url) {
 function loadTemplateLinkTag(templateName) {
   var linkTag = document.createElement('link');
   linkTag.setAttribute('rel', 'import');
-  linkTag.setAttribute('href', lively4Url + 'templates/' + templateName + '.html');
+  linkTag.setAttribute('href', localLively4Url + 'templates/' + templateName + '.html');
   document.head.appendChild(linkTag);
 }
 
@@ -45,10 +45,10 @@ function loadJQuery() {
 }
 
 function loadSystem() {
-  $.get(lively4Url + 'src/external/system.src.js', function(data) {
+  $.get(localLively4Url + 'src/external/system.src.js', function(data) {
     data = data.replace(
       `var baseURIObj = new URL(baseURI);`,
-      `var baseURIObj = new URL("${lively4Url}draft/");` );
+      `var baseURIObj = new URL("${localLively4Url}draft/");` );
     var systemScriptNode = document.createElement('script');
     systemScriptNode.setAttribute('type', 'text/javascript');
     systemScriptNode.innerHTML = data;
@@ -60,22 +60,22 @@ function loadBabel() {
   var babelLoaderNode = document.createElement('script');
   babelLoaderNode.setAttribute('type', 'text/javascript');
   babelLoaderNode.innerHTML = `
-    System.paths['babel'] = '${lively4Url}src/external/babel-browser.js;'
+    System.paths['babel'] = '${localLively4Url}src/external/babel-browser.js;'
     System.config({
       transpiler: 'babel',
       babelOptions: { },
       map: {
-        babel: '${lively4Url}src/external/babel-browser.js'
+        babel: '${localLively4Url}src/external/babel-browser.js'
       }
     })`
   document.head.appendChild(babelLoaderNode);
   System.config({
-    baseURL: lively4Url + 'draft/'
+    baseURL: localLively4Url + 'draft/'
   });
 }
 
 function loadLively4() {
-  System.import(lively4Url + "/src/client/load.js").then(function(load) {
+  System.import(localLively4Url + "/src/client/load.js").then(function(load) {
     load.whenLoaded(() => {
       console.log("lively loaded! " + lively.preferences.getBaseURL());
     })
@@ -85,6 +85,6 @@ function loadLively4() {
 function injectLively4URL() {
   var lively4Node = document.createElement('script');
   lively4Node.setAttribute('type', 'text/javascript');
-  lively4Node.innerHTML = `window.lively4Url = '${lively4Url}';`;
+  lively4Node.innerHTML = `window.lively4url = '${localLively4Url}';`;
   document.head.appendChild(lively4Node);
 }
