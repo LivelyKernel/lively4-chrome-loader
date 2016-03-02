@@ -39,6 +39,7 @@ function onVisitTab(tabId) {
 }
 
 function onUpdateTab(tab) {
+
 	if (tab.status === 'loading') {
 		var doLoadAgain = tabsStore[tab.id] === STATE.LOADED;
 		delete tabsStore[tab.id];
@@ -78,6 +79,7 @@ function saveSettings(config) {
 		'lively4': {
 			'componentString': config.component,
 			'locationString': config.location
+			// 'loadLivelyString': config.loadLively,
 		}
 	})
 }

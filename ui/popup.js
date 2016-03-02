@@ -34,7 +34,8 @@ function setDefaultValue(inputType, value) {
 function replaceDefaultsWithStoredValues() {
 	chrome.storage.sync.get(['lively4'], function(items) {
 		if (items && items.lively4) {
-			setDefaultValue('component', items.lively4.componentString);
+			// document.getElementById("loadLively_checkbox").checked = items.lively4.loadLivelyString;
+			// setDefaultValue('component', items.lively4.componentString);
 			setDefaultValue('location', items.lively4.locationString);
 		}
 	})
@@ -48,8 +49,9 @@ function loadComponentOnEnter(event) {
 
 function getCurrentConfig() {
 	return {
-		component: document.getElementById('component_input').value,
-		location: document.getElementById('location_input').value
+		// component: document.getElementById('component_input').value,
+		location: document.getElementById('location_input').value,
+		// loadLively: document.getElementById('loadLively_checkbox').checked
 	}
 }
 

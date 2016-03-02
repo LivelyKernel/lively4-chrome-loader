@@ -11,10 +11,16 @@ function loadTemplate (componentName, url) {
   setTimeout(function() {
     loadSystem();
     setTimeout(function () {
-      loadBabel();
-      loadLively4();
-      loadTemplateLinkTag(componentName);
-      mountComponent(componentName);
+      if (window.lively) {
+        console.log("Lively already loaded")
+      } else {
+        loadBabel();
+        loadLively4();
+      } 
+      if (componentName && componentName != "") {
+        loadTemplateLinkTag(componentName);
+        mountComponent(componentName);
+      }
     }, 1000)
   }, 1000)
 }
@@ -75,11 +81,30 @@ function loadBabel() {
 }
 
 function loadLively4() {
-  System.import(localLively4Url + "/src/client/load.js").then(function(load) {
-    load.whenLoaded(() => {
+  var livelyLoaderNode = document.createElement('script');
+  livelyLoaderNode.setAttribute('type', 'text/javascript');
+  livelyLoaderNode.innerHTML = `
+  console.log("loadLively4 ${localLively4Url}")
+  System.import("${localLively4Url}/src/client/lively.js").then(function(module) {
+      window.lively = module.default
+      lively.initializeDocument(document)
+      lively.initializeHalos()
       console.log("lively loaded! " + lively.preferences.getBaseURL());
-    })
-  })
+    })`
+  document.head.appendChild(livelyLoaderNode);
+ 
+  
+  // System.import(localLively4Url + "/src/client/lively.js").then(function(module) {
+  //     window.lively = module.default
+  //     console.log("lively loaded! " + lively.preferences.getBaseURL());
+  //   })
+
+  // System.import(localLively4Url + "/src/client/load.js").then(function(load) {        
+
+  //   // load.whenLoaded(() => {
+  //   //   console.log("lively loaded! " + lively.preferences.getBaseURL());
+  //   // })
+  // })
 }
 
 function injectLively4URL() {
