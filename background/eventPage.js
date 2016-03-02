@@ -5,14 +5,6 @@ var STATE = {
 }
 var tabsStore = {};
 
-/**
-* HELPERS
-*/
-
-function setIconForTab(tab) {
-	setIconPath('background/media/icon-' + tabsStore[tab.id] + '.png');
-}
-
 function supportsUrl(urlString) {
 	return urlString.startsWith('http://') || urlString.startsWith('https://')
 }
@@ -22,11 +14,31 @@ function setTabState(tab, state) {
 }
 
 function updateTabState(tab) {
-	var newState = tab === STATE.LOADED ? STATE.LOADED :
+	var newState = (tab === STATE.LOADED) ? STATE.LOADED :
 		supportsUrl(tab.url) ? STATE.ACTIVE :
 		STATE.INACTIVE;
 	setTabState(tab, newState);
-	setIconForTab(tab);
+
+	if (tabsStore[tab.id] == STATE.ACTIVE) {
+		chrome.storage.sync.get(["lively4"], function(configs) {
+			var config = configs.lively4
+			var host;
+			if (config.hosts)
+				host = config.hosts[new URL(tab.url).hostname]
+			if (host && host.active) {
+				setIconPath('background/media/icon-active.png');
+				console.log("load lively4")
+				chrome.tabs.executeScript(null, {
+					file: 'content/load.js',
+				});
+			} else {
+				setIconPath('background/media/icon-inactive.png');
+			}		
+		})
+	} else {
+		setIconPath('background/media/icon-inactive.png');
+	}
+
 }
 
 /**
@@ -59,34 +71,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	onUpdateTab(tab);
 })
 
-/**
-* MESSAGE PROTOCOL
-*/
-
-function setLoadedInTab(tab) {
-	setTabState(tab, STATE.LOADED);
-	setIconForTab(tab);
-}
-
 function setIconPath(path) {
 	chrome.browserAction.setIcon({
         path: path
     });
 }
-
-function saveSettings(config) {
-	chrome.storage.sync.set({
-		'lively4': {
-			'componentString': config.component,
-			'locationString': config.location
-			// 'loadLivelyString': config.loadLively,
-		}
-	})
-}
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	switch(request.type) {
-		case 'loadedInTab': setLoadedInTab(request.payload); break;
-		case 'saveConfig': saveSettings(request.payload); break;
-	}
-});

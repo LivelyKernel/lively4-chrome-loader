@@ -1,52 +1,37 @@
 var localLively4Url;
 
-loadTemplate(
-  config.component,
-  config.location);
+loadLively();
 
-function loadTemplate (componentName, url) {
-  localLively4Url = url;
-  injectLively4URL();
-  loadJQuery();
-  setTimeout(function() {
-    loadSystem();
-    setTimeout(function () {
-      if (window.lively) {
-        console.log("Lively already loaded")
-      } else {
-        loadBabel();
-        loadLively4();
-      } 
-      if (componentName && componentName != "") {
-        loadTemplateLinkTag(componentName);
-        mountComponent(componentName);
-      }
-    }, 1000)
-  }, 1000)
-}
+function loadLively() {
+  if (window.lively4noserviceworker) {
+    console.log("Lively4 already loaded!")
+    return // if you cannot figure out why you are called twice... just ignore it! #Jens
+  }
+  window.lively4noserviceworker = true
 
-function loadTemplateLinkTag(templateName) {
-  var linkTag = document.createElement('link');
-  linkTag.setAttribute('rel', 'import');
-  linkTag.setAttribute('href', localLively4Url + 'templates/' + templateName + '.html');
-  document.head.appendChild(linkTag);
-}
-
-function mountComponent(partIdentifierString) {
-  var component = document.createElement(partIdentifierString);
-  document.body.insertBefore(component, document.body.firstChild);
-  component.style.setProperty('position', 'fixed');
-  component.style.setProperty('z-index', 10000);
-  chrome.runtime.sendMessage({
-    type: 'loadedInTab',
-    payload: config.tab
-  });
+  chrome.storage.sync.get(["lively4"], function(configs) {
+    var config = configs.lively4
+      localLively4Url = config.location || "https://lively-kernel.org/lively4/";
+      injectLively4URL();
+      loadJQuery();
+      setTimeout(function() {
+        loadSystem();
+        setTimeout(function () {
+          if (window.lively) {
+            console.log("Lively already loaded")
+          } else {
+            loadBabel();
+            loadLively4();
+          } 
+        }, 1000)
+      }, 1000)
+  })
 }
 
 function loadJQuery() {
   var jQueryNode = document.createElement('script');
   jQueryNode.setAttribute('type', 'text/javascript');
-  jQueryNode.setAttribute('src', 'https://code.jquery.com/jquery-2.1.4.js');
+  jQueryNode.setAttribute('src', localLively4Url + 'external/jquery.js');
   document.head.appendChild(jQueryNode);
 }
 
@@ -87,24 +72,11 @@ function loadLively4() {
   console.log("loadLively4 ${localLively4Url}")
   System.import("${localLively4Url}/src/client/lively.js").then(function(module) {
       window.lively = module.default
-      lively.initializeDocument(document)
       lively.initializeHalos()
+      lively.initializeDocument(document, true)
       console.log("lively loaded! " + lively.preferences.getBaseURL());
     })`
   document.head.appendChild(livelyLoaderNode);
- 
-  
-  // System.import(localLively4Url + "/src/client/lively.js").then(function(module) {
-  //     window.lively = module.default
-  //     console.log("lively loaded! " + lively.preferences.getBaseURL());
-  //   })
-
-  // System.import(localLively4Url + "/src/client/load.js").then(function(load) {        
-
-  //   // load.whenLoaded(() => {
-  //   //   console.log("lively loaded! " + lively.preferences.getBaseURL());
-  //   // })
-  // })
 }
 
 function injectLively4URL() {
