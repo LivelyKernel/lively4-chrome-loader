@@ -6,7 +6,7 @@ function toggleLoadLively(){
 	var checked =  get('loadLively_checkbox').checked
 	chrome.tabs.getSelected(function(tab) {
 		var host = new URL(tab.url).hostname
-		changeConfig(function(config) {
+		withConfig(function(config) {
 			ensureHost(config, host).active = checked
 			if (checked) 
 				load()
@@ -20,7 +20,7 @@ function toggleLoadLively(){
 
 function changeSettingsOnEnter(event) {
     if (event.keyCode === 13) {
-		changeConfig(function(config) {
+		withConfig(function(config) {
 			config.location = get('location_input').value
 		})
     }
@@ -49,7 +49,7 @@ function init() {
 	chrome.tabs.getSelected(function(tab) {
 		var host = new URL(tab.url).hostname
 		get('host_label').textContent = host
-		changeConfig(function(config) {
+		withConfig(function(config) {
 			get('location_input').value = config.location
 			get('loadLively_checkbox').checked = ensureHost(config, host).active
 		})

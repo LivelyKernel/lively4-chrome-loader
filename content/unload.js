@@ -1,4 +1,7 @@
 
 
-
-alert("unloading Lively is not supported yet! Please reload page....")
+try {
+  lively.unload()
+} catch(err) {
+  console.log("Could not unload Lively!", err)
+}

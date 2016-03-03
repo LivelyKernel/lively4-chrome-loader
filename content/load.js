@@ -3,15 +3,15 @@ var localLively4Url;
 loadLively();
 
 function loadLively() {
-  if (window.lively4noserviceworker) {
+  if (window.lively4load) {
     console.log("Lively4 already loaded!")
     return // if you cannot figure out why you are called twice... just ignore it! #Jens
   }
-  window.lively4noserviceworker = true
+  window.lively4load = true
   
   chrome.storage.sync.get(["lively4"], function(configs) {
-      var config = configs.lively4 || {}
-      var url = new URL(config.location || "https://lively-kernel.org/lively4/")
+      var config = configs.lively4 
+      var url = new URL(config.location)
       url.protocol = document.location.protocol
       localLively4Url = "" + url
       injectLively4URL();

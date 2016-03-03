@@ -20,14 +20,12 @@ function updateTabState(tab) {
 	setTabState(tab, newState);
 
 	if (tabsStore[tab.id] == STATE.ACTIVE) {
-		chrome.storage.sync.get(["lively4"], function(configs) {
-			var config = configs.lively4 || {}
-			var host;
-			if (config.hosts)
-				host = config.hosts[new URL(tab.url).hostname]
-			if (host && host.active) {
+		withConfig(function(config, saveConfig) {
+			var host = new URL(tab.url).hostname
+			if (ensureHost(config, host).active) {
 				setIconPath('background/media/icon-active.png');
 				console.log("load lively4")
+				saveConfig()
 				chrome.tabs.executeScript(null, {
 					file: 'content/load.js',
 				});
