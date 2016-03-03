@@ -9,7 +9,7 @@
     "default_popup": "ui/popup.html"
   },
   "background": {
-    "scripts": ["background/eventPage.js"],
+    "scripts": ["background/configs.js", "background/eventPage.js"],
     "persistent": false
   },
   "permissions": [
