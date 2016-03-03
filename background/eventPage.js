@@ -21,7 +21,7 @@ function updateTabState(tab) {
 
 	if (tabsStore[tab.id] == STATE.ACTIVE) {
 		chrome.storage.sync.get(["lively4"], function(configs) {
-			var config = configs.lively4
+			var config = configs.lively4 || {}
 			var host;
 			if (config.hosts)
 				host = config.hosts[new URL(tab.url).hostname]

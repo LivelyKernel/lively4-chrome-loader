@@ -10,7 +10,7 @@ function loadLively() {
   window.lively4noserviceworker = true
   
   chrome.storage.sync.get(["lively4"], function(configs) {
-      var config = configs.lively4
+      var config = configs.lively4 || {}
       var url = new URL(config.location || "https://lively-kernel.org/lively4/")
       url.protocol = document.location.protocol
       localLively4Url = "" + url
