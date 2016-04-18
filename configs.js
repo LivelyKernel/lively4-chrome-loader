@@ -10,7 +10,7 @@ function withConfig(mutateConfigCB) {
 
 function ensureConfig(configs) {
 	configs.lively4 = configs.lively4 || {}
-	configs.lively4.location = configs.lively4.location || "http://lively-kernel.org/lively4/"
+	configs.lively4.location = configs.lively4.location || "http://lively-kernel.org/lively4/lively4-stable/"
 	configs.lively4.hosts = configs.lively4.hosts || {}
 	return configs.lively4
 }

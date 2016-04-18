@@ -33,20 +33,24 @@ function loadLively() {
 function loadJQuery() {
   var jQueryNode = document.createElement('script');
   jQueryNode.setAttribute('type', 'text/javascript');
-  jQueryNode.setAttribute('src', localLively4Url + 'external/jquery.js');
+  jQueryNode.setAttribute('src', localLively4Url + 'src/external/jquery.js');
   document.head.appendChild(jQueryNode);
 }
 
-function loadSystem() {
+function loadSystem() {  
   $.get(localLively4Url + 'src/external/system.src.js', function(data) {
     data = data.replace(
       `var baseURIObj = new URL(baseURI);`,
-      `var baseURIObj = new URL("${localLively4Url}draft/");` );
+      `var baseURIObj = new URL("${localLively4Url}");` );
     var systemScriptNode = document.createElement('script');
     systemScriptNode.setAttribute('type', 'text/javascript');
     systemScriptNode.innerHTML = data;
     document.head.appendChild(systemScriptNode);
   })
+  var regeneratorRuntimeNode = document.createElement('script');
+  regeneratorRuntimeNode.setAttribute('type', 'text/javascript');
+  regeneratorRuntimeNode.setAttribute('src', localLively4Url + 'vendor/regenerator-runtime.js');
+  document.head.appendChild(regeneratorRuntimeNode);
 }
 
 function loadBabel() {
@@ -63,7 +67,7 @@ function loadBabel() {
     })`
   document.head.appendChild(babelLoaderNode);
   System.config({
-    baseURL: localLively4Url + 'draft/'
+    baseURL: localLively4Url + ''
   });
 }
 
