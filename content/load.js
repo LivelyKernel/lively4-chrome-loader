@@ -53,9 +53,9 @@ function loadSystem() {
                 `var baseURIObj = new URL("${localLively4Url}");`);
             var systemScriptNode = document.createElement('script');
             systemScriptNode.setAttribute('type', 'text/javascript');
-            systemScriptNode.addEventListener("load", resolve, false);
             systemScriptNode.innerHTML = data;
             document.head.appendChild(systemScriptNode);
+            resolve();
         })
     });
 
