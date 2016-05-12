@@ -18,6 +18,7 @@ function loadLively() {
             .then(loadJQuery)
             .then(loadSystem)
             .then(loadBabel)
+            .then(loadFontAwesome)
             .then(loadLively4);
     })
 }
@@ -43,6 +44,14 @@ function loadJavaScriptThroughDOM(name, src, force) {
 
 function loadJQuery() {
     return loadJavaScriptThroughDOM("jQuery", localLively4Url + 'src/external/jquery.js', false);
+}
+
+function loadFontAwesome() {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = localLively4Url + "src/external/font-awesome/css/font-awesome.min.css";
+    document.head.appendChild(link);
+    return Promise.resolve();
 }
 
 function loadSystem() {
