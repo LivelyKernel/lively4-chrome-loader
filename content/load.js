@@ -92,7 +92,8 @@ function loadBabel() {
                 transpiler: 'babel',
                 babelOptions: { },
                 map: {
-                  babel: '${localLively4Url}src/external/babel-browser.js'
+                  babel: '${localLively4Url}src/external/babel-browser.js',
+                  kernel: '${localLively4Url}src/client/legacy-kernel.js'
                 }
             })`
         document.head.appendChild(babelLoaderNode);
