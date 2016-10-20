@@ -63,6 +63,7 @@ function loadSystem() {
             var systemScriptNode = document.createElement('script');
             systemScriptNode.setAttribute('type', 'text/javascript');
             systemScriptNode.innerHTML = data;
+            // systemScriptNode.addEventListener("load", resolve, false);
             document.head.appendChild(systemScriptNode);
             resolve();
         })
@@ -89,6 +90,7 @@ function loadBabel() {
         babelLoaderNode.innerHTML = `
             System.paths['babel'] = '${localLively4Url}src/external/babel-browser.js;'
             System.config({
+            	baseURL: '${localLively4Url}',
                 transpiler: 'babel',
                 babelOptions: { },
                 map: {
@@ -106,29 +108,34 @@ function loadLively4() {
         return Promise.resolve();
     }
     return new Promise((resolve) => {
-        System.config({
-            baseURL: localLively4Url + ''
-        });
-        var livelyLoaderNode = document.createElement('script');
-        livelyLoaderNode.setAttribute('type', 'text/javascript');
-        livelyLoaderNode.innerHTML = `
-            console.log("loadLively4 ${localLively4Url}")
-            System.import("${localLively4Url}/src/client/lively.js").then(function(module) {
-                window.lively = module.default
-                lively.initializeHalos()
-                lively.initializeDocument(document, true)
-                console.log("lively loaded! " + lively.preferences.getBaseURL());
-            })`
-        document.head.appendChild(livelyLoaderNode);
+  		var lively4node = document.createElement('script');
+        lively4node.setAttribute('type', 'text/javascript');
+        lively4node.innerHTML = `
+        System.import(lively4url + "/src/client/load.js").then(function(load){
+	        console.log("load lively 1/3")
+	        load.whenLoaded(function(){
+	          console.log("load lively 2/3")
+	          lively.components.loadUnresolved().then(function() {
+	            console.log("load lively 3/3")
+	              lively.initializeDocument(document)
+	              console.log("Finally loaded!")
+	          })
+	      })}).catch(function(err) {
+	          console.log("Lively Loaging failed", err)
+	          alert("load Lively4 failed:" + err)
+	      });
+        `
+        document.head.appendChild(lively4node);
         resolve();
     });
 }
+
 
 function injectLively4URL() {
     return new Promise((resolve) => {
         var lively4Node = document.createElement('script');
         lively4Node.setAttribute('type', 'text/javascript');
-        lively4Node.innerHTML = `window.lively4url = '${localLively4Url}';`;
+        lively4Node.innerHTML = `window.lively4url = '${localLively4Url}'; window.lively4chrome=true;`;
         document.head.appendChild(lively4Node);
         resolve();
     });
